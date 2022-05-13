@@ -1,6 +1,6 @@
 %global _hardened_build 1
 Name:                bird
-Version:             2.0.8
+Version:             2.0.9
 Release:             1
 Summary:             BIRD Internet Routing Daemon
 License:             GPLv2+
@@ -8,6 +8,8 @@ URL:                 https://bird.network.cz/
 Source0:             https://bird.network.cz/download/bird-%{version}.tar.gz
 Source1:             bird.service
 Source2:             bird.tmpfilesd
+#patch from upstream: https://gitlab.nic.cz/labs/bird/-/commit/fcb4dd0c831339c4374ace17d8f2ae6ebfeed279.diff
+Patch0:              bird-2.0.9-babel-iface.patch 
 BuildRequires:       flex bison ncurses-devel readline-devel sed gcc make libssh-devel systemd
 Requires(pre):       shadow-utils
 Obsoletes:           bird-sysvinit
@@ -40,6 +42,7 @@ powerful language for route filtering.
 
 %prep
 %setup -q
+%patch0 -p1 -b .babel-iface
 
 %build
 %configure --runstatedir=%{_rundir}/bird
@@ -92,5 +95,8 @@ exit 0
 %endif
 
 %changelog
+* Fri May 13 2022 baizhonggui <baizhonggui@h-partners.com> - 2.0.9-1
+- update to 2.0.9
+
 * Mon Sep 6 2021 wulei <wulei80@huawei.com> - 2.0.8-1
 - package init
